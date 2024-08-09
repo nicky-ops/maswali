@@ -28,15 +28,30 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+LOGIN_REDIRECT_URL = ''
+LOGIN_URL = 'account:login'
+LOGOUT_URL = 'account:logout'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Authentication Backends
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'account.authentication.EmailAuthBackend',
+]
+
 # Application definition
 
 INSTALLED_APPS = [
+    "account.apps.AccountConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "quiz.apps.QuizConfig"
 ]
 
 MIDDLEWARE = [
