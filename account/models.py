@@ -38,7 +38,7 @@ class UserManager(BaseUserManager):
         if username is None:
             raise TypeError('Superusers must have a username')
         
-        user = self.create_superuser(username, email, password, **kwargs)
+        user = self.create_user(username, email, password, **kwargs)
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
@@ -59,6 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     linkedin_url = models.URLField(blank=True, max_length=2000)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
     avatar = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
