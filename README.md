@@ -25,3 +25,10 @@ body:
         "refresh": refresh_token
     }
 ```
+7. `POST /api/auth/logout/` - logout and delete refresh token
+body:
+```
+    {
+        "refresh": refresh_token
+    }
+```
