@@ -11,7 +11,7 @@ export const registerUser = (userData) => api.post('auth/register/', userData);
 export const getUsers = () => api.get('users/');
 export const getUser = (id) => api.get(`users/${id}/`);
 export const updateUser = (id, data) => api.patch(`users/${id}/`, data);
-export const resetPassword = (data) => api.post('auth/reset-password/', data);
+export const resetPassword = (data) => api.post('auth/password-reset/confirm/', data);
 export const requestPasswordReset = (data) => api.post('auth/password-reset/', data);
 
 // function to set the JWT token for authenticated requests

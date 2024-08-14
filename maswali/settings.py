@@ -36,6 +36,8 @@ CORS_ALLOWED_ORIGINS =  [
 AUTH_USER_MODEL = 'core_user.User'
 
 
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -148,3 +150,10 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '9c291a6f5b0093'
+EMAIL_HOST_PASSWORD = '308de02c6c0606'
+EMAIL_PORT = '2525'

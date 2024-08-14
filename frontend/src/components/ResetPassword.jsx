@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { resetPassword } from '../services/api'; // Import your API function
+import { resetPassword } from '../services/api';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
@@ -25,9 +25,14 @@ const ResetPassword = () => {
     }
 
     try {
-      await resetPassword({ token, email, password });
+      const data = {
+        email,
+        token,
+        new_password: password,
+      };
+      await resetPassword(data);
       setSuccess('Password has been reset successfully!');
-      setTimeout(() => navigate('/login'), 3000); // Redirect to login page after 3 seconds
+      setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
       setError('Failed to reset password. Please try again.');
     }
