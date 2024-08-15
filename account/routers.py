@@ -6,7 +6,8 @@ from .viewsets import (
     RefreshViewSet, 
     LogoutViewSet, 
     PasswordResetRequestViewSet, 
-    PasswordResetViewSet
+    PasswordResetViewSet,
+    UserProfileViewSet
 )
 
 router = routers.SimpleRouter()
@@ -17,6 +18,7 @@ router.register(r'auth/refresh', RefreshViewSet, basename='auth-refresh')
 router.register(r'auth/logout', LogoutViewSet, basename='auth-logout')
 router.register(r'auth/password-reset', PasswordResetRequestViewSet, basename='auth-password-reset')
 router.register(r'auth/password-reset/confirm', PasswordResetViewSet, basename='auth-password-reset-confirm')
+router.register(r'profile', UserProfileViewSet, basename='profile')
 
 urlpatterns = [
     *router.urls

@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.views import TokenRefreshView
-from .serializer import UserSerializer, RegisterSerializer, LoginSerializer, PasswordResetRequestSerializer, PasswordResetSerializer
+from .serializer import UserSerializer, RegisterSerializer, LoginSerializer, PasswordResetRequestSerializer, PasswordResetSerializer, UserProfileSerializer
 from .models import User
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -23,6 +23,26 @@ class UserViewSet(viewsets.ModelViewSet):
         obj = User.objects.get_object_by_public_id(self.kwargs['pk'])
         self.check_object_permissions(self.request, obj)
         return obj
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]  
+    http_method_names = ['get', 'patch']
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
 
 
 class RegisterViewSet(ViewSet):

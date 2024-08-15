@@ -4,6 +4,7 @@ from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from django.utils.html import format_html
 from django.contrib.auth import get_user_model
 from .models import User
 
@@ -18,6 +19,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'bio', 'email', 'is_active', 'created', 'updated', 'website_url', 'twitter_url', 'github_url', 'linkedin_url','avatar']
         read_only_field = ['is_active']
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = ['username', 'website_url', 'bio', 'twitter_url', 'github_url', 'linkedin_url', 'avatar']
+        read_only_fields = ['username', 'email']
 
 
 class RegisterSerializer(UserSerializer):
@@ -61,11 +70,18 @@ class PasswordResetRequestSerializer(serializers.Serializer):
     def send_password_reset_email(self, user):
         token = default_token_generator.make_token(user)
         reset_url = f"http://localhost:5173/reset-password?token={token}&email={user.email}"
+
+        html_message = format_html(
+        'Click <a href="{}">here</a> to reset your password.',
+        reset_url
+        )
+
         send_mail(
             'Password Reset Request',
             f'Click the link to reset your password: {reset_url}',
             'from@example.com',
             [user.email],
+            html_message=html_message,
         )
 
 
@@ -96,3 +112,5 @@ class PasswordResetSerializer(serializers.Serializer):
         user.set_password(new_password)
         user.save()
         return user
+
+      
