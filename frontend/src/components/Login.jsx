@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser, setAuthToken } from '../services/api';
 
-const Login = () => {
+const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,6 +17,7 @@ const Login = () => {
       localStorage.setItem('accessToken', access);
       localStorage.setItem('refreshToken', refresh);
       setAuthToken(access);
+      setIsAuthenticated(true); // Update auth state
       navigate('/'); // Redirect to home page after login
     } catch (err) {
       setError('Invalid email or password');
