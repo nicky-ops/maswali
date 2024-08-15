@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/'; //  API URL from the backend 
+// API base URL from the backend
+const API_URL = 'http://localhost:8000/api/'; 
 
 const api = axios.create({
   baseURL: API_URL,
@@ -55,7 +56,7 @@ api.interceptors.response.use(
         const newAccessToken = data.access;
         localStorage.setItem('accessToken', newAccessToken);
         setAuthToken(newAccessToken);
-        return api(originalRequest); // retry the original request with new token
+        return api(originalRequest); // Retry the original request with the new token
       } catch (refreshError) {
         logoutUser(); // Logout if refresh fails
         window.location.href = '/login'; // Redirect to login page
