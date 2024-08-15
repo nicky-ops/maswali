@@ -4,6 +4,8 @@ import UserList from './components/UserList';
 import UserDetail from './components/UserDetail';
 import Login from './components/Login';
 import Register from './components/Register';
+import ForgotPassword from './components/ForgotPassword'; 
+import ResetPassword from './components/ResetPassword';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="/users/:id" element={<UserDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} /> 
+          <Route path="/reset-password" element={<ResetPassword />} /> 
         </Routes>
       </div>
     </Router>
