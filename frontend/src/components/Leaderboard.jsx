@@ -19,7 +19,7 @@ function Leaderboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Leaderboard</h1>
+      <h1 className="text-2xl font-bold mb-4">Name</h1>
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {leaderboard.map((entry, index) => (
           <div key={index} className="bg-green-100 p-4 rounded-lg shadow-lg">
