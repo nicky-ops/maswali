@@ -84,7 +84,7 @@ function App() {
       </div>
       <footer className="bg-white shadow mt-8">
         <div className="container mx-auto p-4 flex justify-between items-center">
-          <p>&copy; 2024 Your Quiz App. All rights reserved.</p>
+          <p>&copy; 2024 Maswali Quiz app. All rights reserved.</p>
           <div>
             <Link to="/privacy" className="mr-4 hover:text-blue-500">Privacy Policy</Link>
             <Link to="/terms" className="hover:text-blue-500">Terms of Service</Link>

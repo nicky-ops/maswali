@@ -19,7 +19,7 @@ const HomePage = () => {
           Explore our features and enjoy your stay.
         </p>
         <div className="mt-8 flex justify-center">
-          <Link to="/quiz" className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300">
+          <Link to="/quizzes" className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300">
             Start Quiz
           </Link>
         </div>
