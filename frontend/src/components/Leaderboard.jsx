@@ -7,7 +7,7 @@ function Leaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await api.get('leaderboard/');
+        const response = await api.get('/quiz/leaderboard/');
         setLeaderboard(response.data);
       } catch (error) {
         console.error('Error fetching leaderboard:', error);
