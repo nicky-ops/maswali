@@ -36,7 +36,6 @@ const Login = ({ setIsAuthenticated }) => {
     >
       <div className="w-full max-w-md p-8 bg-white bg-opacity-90 shadow-2xl rounded-3xl">
         <div className="flex flex-col items-center">
-          <img src="/path/to/logo.png" alt="Logo" className="mb-6 h-16 w-auto" />
           <h3 className="text-3xl font-bold text-center text-gray-800">Welcome Back</h3>
           <p className="text-center text-gray-600">Please login to your account</p>
         </div>
