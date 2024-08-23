@@ -6,10 +6,12 @@ from django.db.models import Max
 from .models import Category, Quiz, QuizAttempt, UserAnswer, Choice
 from .serializer import CategorySerializer, QuizSerializer, QuizAttemptSerializer, UserAnswerSerializer, LeaderboardSerializer
 
+
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.prefetch_related('quiz_set__questions__choices').all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
+
 
 class QuizViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Quiz.objects.prefetch_related('questions__choices').all()
@@ -33,32 +35,45 @@ class QuizViewSet(viewsets.ReadOnlyModelViewSet):
             question_id = answer_data.get('question_id')
             selected_choice_id = answer_data.get('selected_choice_id')
 
-            question = quiz.questions.get(pk=question_id)
-            selected_choice = question.choices.get(pk=selected_choice_id)
+            try:
+                question = quiz.questions.get(pk=question_id)
+                selected_choice = question.choices.get(pk=selected_choice_id)
+            except (Question.DoesNotExist, Choice.DoesNotExist):
+                continue
 
+            # Record the user's answer
             UserAnswer.objects.create(
                 attempt=attempt,
                 question=question,
                 selected_choice=selected_choice
             )
 
+            # Increment score if the selected choice is correct
             if selected_choice in correct_choices:
                 score += 1
 
+        # Save attempt with final score and end time
         attempt.score = score
-        attempt.end_time = timezone.now()  # Record end time
+        attempt.end_time = timezone.now()
         attempt.save()
 
+        # Return serialized response
         serializer = QuizAttemptSerializer(attempt)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 class LeaderboardViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = QuizAttempt.objects.all()
     serializer_class = LeaderboardSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return QuizAttempt.objects.values('user__username').annotate(max_score=Max('score')).order_by('-max_score')[:3]
+        # Ensure we get the correct user info and max score
+        return QuizAttempt.objects.values(
+            'user__username'
+        ).annotate(
+            max_score=Max('score')
+        ).order_by('-max_score')[:3]
+
 
 class QuizAttemptViewSet(viewsets.ModelViewSet):
     serializer_class = QuizAttemptSerializer
@@ -66,7 +81,9 @@ class QuizAttemptViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post']
 
     def get_queryset(self):
+        # Filter attempts by logged-in user
         return QuizAttempt.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
+        # Automatically associate the logged-in user with the attempt
         serializer.save(user=self.request.user)
