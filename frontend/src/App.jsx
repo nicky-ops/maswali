@@ -8,7 +8,8 @@ import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import UserProfile from './components/UserProfile';
 import QuizList from './components/QuizList';
-import QuizDetail from './components/QuizDetail';
+import CategoryQuizzes from './components/CategoryQuizzes';
+import QuizPage from './components/QuizPage.jsx'; // Add this import
 import Leaderboard from './components/Leaderboard'; 
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -62,9 +63,14 @@ function App() {
               <QuizList />
             </ProtectedRoute>
           } />
-          <Route path="/quizzes/:id" element={
+          <Route path="/quiz-category/:categoryId" element={
             <ProtectedRoute>
-              <QuizDetail />
+              <CategoryQuizzes />
+            </ProtectedRoute>
+          } />
+          <Route path="/quizzes/:quizId" element={
+            <ProtectedRoute>
+              <QuizPage />
             </ProtectedRoute>
           } />
           <Route path="/leaderboard" element={
@@ -77,14 +83,14 @@ function App() {
         </Routes>
       </div>
       <footer className="bg-white shadow mt-8">
-          <div className="container mx-auto p-4 flex justify-between items-center">
-            <p>&copy; 2024 Your Quiz App. All rights reserved.</p>
-            <div>
-              <Link to="/privacy" className="mr-4 hover:text-blue-500">Privacy Policy</Link>
-              <Link to="/terms" className="hover:text-blue-500">Terms of Service</Link>
-            </div>
+        <div className="container mx-auto p-4 flex justify-between items-center">
+          <p>&copy; 2024 Your Quiz App. All rights reserved.</p>
+          <div>
+            <Link to="/privacy" className="mr-4 hover:text-blue-500">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-blue-500">Terms of Service</Link>
           </div>
-        </footer>
+        </div>
+      </footer>
     </Router>
   );
 }

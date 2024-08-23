@@ -1,13 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Quiz, Question, Choice, QuizAttempt
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['id', 'name']
+from .models import Category, Quiz, Question, Choice, QuizAttempt, UserAnswer
 
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,21 +14,32 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ['id', 'text', 'choices']
 
 class QuizSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)
-    created_by = serializers.StringRelatedField()
 
     class Meta:
         model = Quiz
-        fields = ['id', 'title', 'category', 'time_limit', 'questions', 'created_by', 'created_at', 'updated_at']
+        fields = ['id', 'title', 'time_limit', 'questions']
+
+class CategorySerializer(serializers.ModelSerializer):
+    quizzes = QuizSerializer(many=True, read_only=True, source='quiz_set')
+
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'quizzes']
+
+class UserAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAnswer
+        fields = ['question', 'selected_choice']
 
 class QuizAttemptSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
     quiz = serializers.StringRelatedField()
+    user_answers = UserAnswerSerializer(many=True)
 
     class Meta:
         model = QuizAttempt
-        fields = ['id', 'user', 'quiz', 'score', 'start_time', 'end_time']
+        fields = ['id', 'user', 'quiz', 'score', 'start_time', 'end_time', 'user_answers']
 
 class LeaderboardSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')

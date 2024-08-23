@@ -1,45 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api'; 
+import { Link } from 'react-router-dom';
+import api from '../services/api';
 
 function QuizList() {
-  const [quizzes, setQuizzes] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchQuizzes = async () => {
+    const fetchCategories = async () => {
       try {
-        const token = localStorage.getItem('accessToken'); // Get token from localStorage
-        if (!token) {
-          setError('Authentication token is missing.');
-          return;
-        }
-
-        // Include token in the request headers
-        const response = await api.get('quiz/quizzes/', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setQuizzes(response.data);
+        const response = await api.get('quiz/categories/');
+        setCategories(response.data);
       } catch (error) {
-        setError('Error fetching quizzes.');
-        console.error('Error fetching quizzes:', error);
+        setError('Error fetching categories. Please try again.');
+        console.error('Error fetching categories:', error);
       }
     };
 
-    fetchQuizzes();
+    fetchCategories();
   }, []);
 
   return (
-    <div>
-      <h1>Quizzes</h1>
-      {error && <p>{error}</p>}
-      <ul>
-        {quizzes.map((quiz) => (
-          <li key={quiz.id}>{quiz.title}</li>
+    <div className="container mx-auto mt-8">
+      <h1 className="text-2xl font-bold mb-4">Quiz Categories</h1>
+      {error && <p className="text-red-500">{error}</p>}
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {categories.map((category) => (
+          <div key={category.id} className="bg-white p-4 rounded shadow hover:shadow-md transition-shadow">
+            <h2 className="text-xl font-semibold mb-2">{category.name}</h2>
+            <Link 
+              to={`/quiz-category/${category.id}`} 
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              View Quizzes
+            </Link>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
