@@ -41,9 +41,9 @@ class QuizAttemptSerializer(serializers.ModelSerializer):
         model = QuizAttempt
         fields = ['id', 'user', 'quiz', 'score', 'start_time', 'end_time', 'user_answers']
 
-class LeaderboardSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username')
+class LeaderboardSerializer(serializers.Serializer):
+    username = serializers.CharField(source='user__username')
+    max_score = serializers.IntegerField()
 
     class Meta:
-        model = QuizAttempt
-        fields = ['username', 'score']
+        fields = ['username', 'max_score']
