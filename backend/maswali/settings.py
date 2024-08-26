@@ -27,11 +27,12 @@ SECRET_KEY = "django-insecure-f!4l*!vw_dh3ut!kkbq9xtw4a_91uh99h+@n&hxnaf)6*9*vto
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['maswali.onrender.com']
+ALLOWED_HOSTS = ['*' ]
 
 CORS_ALLOWED_ORIGINS =  [
 		    "http://127.0.0.1:5173",
 		    "http://localhost:5173",
+	"https://maswali.vercel.app/"
 ]
 
 
