@@ -4,6 +4,8 @@ import { registerUser } from '../services/api';
 
 const Register = () => {
   const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -13,8 +15,8 @@ const Register = () => {
     e.preventDefault();
     setError('');
     try {
-      await registerUser({ username, email, password });
-      navigate('/login'); // Redirect to login page after successful registration
+      await registerUser({ username, first_name: firstName, last_name: lastName, email, password });
+      navigate('/login'); 
     } catch (err) {
       setError('Registration failed. Please try again.');
     }
@@ -45,6 +47,28 @@ const Register = () => {
               className="w-full px-4 py-3 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700" htmlFor="firstName">First Name</label>
+            <input
+              type="text"
+              placeholder="First Name"
+              className="w-full px-4 py-3 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700" htmlFor="lastName">Last Name</label>
+            <input
+              type="text"
+              placeholder="Last Name"
+              className="w-full px-4 py-3 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               required
             />
           </div>

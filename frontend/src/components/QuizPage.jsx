@@ -60,6 +60,7 @@ function QuizPage() {
       const totalQuestions = quiz.questions.length;
       const finalScore = (score / totalQuestions) * 100;
 
+      console.log("Navigating to results with attemptId:", quizAttemptId);
       navigate(`/results?score=${finalScore}&attemptId=${quizAttemptId}`);  // Redirect to results page
     } catch (error) {
       setError('Error submitting quiz. Please try again.');

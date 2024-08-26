@@ -4,7 +4,7 @@ from .models import Category, Quiz, Question, Choice, QuizAttempt, UserAnswer
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Choice
-        fields = ['id', 'option', 'text']
+        fields = ['id', 'option', 'text', 'is_correct']
 
 class QuestionSerializer(serializers.ModelSerializer):
     choices = ChoiceSerializer(many=True, read_only=True)
@@ -35,7 +35,7 @@ class UserAnswerSerializer(serializers.ModelSerializer):
 class QuizAttemptSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
     quiz = serializers.StringRelatedField()
-    user_answers = UserAnswerSerializer(many=True)
+    user_answers = UserAnswerSerializer(many=True, read_only=True)
 
     class Meta:
         model = QuizAttempt
