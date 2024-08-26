@@ -1,9 +1,46 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Leaderboard from './Leaderboard';
 
 const HomePage = () => {
-  const categories = ['Python', 'JavaScript', 'C'];
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check authentication status when component mounts
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('accessToken'); // Updated to check 'accessToken'
+    
+    // Log the token to verify it exists
+    console.log('Token:', token);
+    
+    setIsAuthenticated(!!token); // Set isAuthenticated to true if token exists
+    console.log('Is Authenticated:', !!token); // Log the authentication state
+  };
+
+  const handleTakeQuiz = () => {
+    if (isAuthenticated) {
+      navigate('/quizzes');
+    } else {
+      navigate('/login');
+    }
+  };
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      checkAuthStatus();
+    };
+
+    // Listen to changes in localStorage
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   return (
     <div
@@ -20,26 +57,43 @@ const HomePage = () => {
         <p className="mt-4 text-center text-gray-600">
           Test your programming skills with timed quizzes in various languages
         </p>
-        
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {categories.map((category) => (
-            <Link 
-              key={category}
-              to={`/quizzes/${category.toLowerCase()}`} 
-              className="px-4 py-2 bg-green-600 text-white text-center rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300"
-            >
-              {category}
-            </Link>
-          ))}
+
+        <div className="mt-6 p-6 bg-green-100 rounded-lg border-2 border-green-500">
+          <p className="text-green-900 text-lg font-semibold leading-relaxed">
+            Maswali is your gateway to coding excellence! Here's what we offer:
+          </p>
+          <ul className="list-disc list-inside mt-2 space-y-2 text-green-800 text-lg font-medium">
+            <li>Challenging timed quizzes in multiple programming languages</li>
+            <li>Global leaderboards to compete with developers worldwide</li>
+            <li>Tailored difficulty levels for beginners and experts alike</li>
+            <li>An engaging platform to sharpen your coding skills daily</li>
+          </ul>
         </div>
 
         <div className="mt-8 flex justify-center space-x-4">
-          <Link to="/profile" className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300">
-            My Profile
-          </Link>
-          <Link to="/quizzes" className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300">
-            All Quizzes
-          </Link>
+          {isAuthenticated ? (
+            <button
+              onClick={handleTakeQuiz}
+              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300"
+            >
+              Take Quiz
+            </button>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300"
+              >
+                Signup
+              </Link>
+            </>
+          )}
         </div>
       </div>
 

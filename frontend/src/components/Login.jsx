@@ -13,12 +13,25 @@ const Login = ({ setIsAuthenticated }) => {
     setError('');
     try {
       const response = await loginUser({ email, password });
-      const { access, refresh } = response.data;
+      const { access, refresh } = response.data;  // Assume access and refresh tokens are returned from backend
+
+      // Console logs to verify token
+      console.log('Access Token:', access);
+      console.log('Refresh Token:', refresh);
+
+      // Save tokens to localStorage
       localStorage.setItem('accessToken', access);
       localStorage.setItem('refreshToken', refresh);
+
+      // Set the authorization token for future requests
       setAuthToken(access);
-      setIsAuthenticated(true); // Update auth state
-      navigate('/'); // Redirect to home page after login
+
+      // Update authentication status
+      setIsAuthenticated(true);
+
+      // Redirect to the homepage after successful login
+      navigate('/');
+
     } catch (err) {
       setError('Invalid email or password');
     }
