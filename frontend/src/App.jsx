@@ -12,6 +12,7 @@ import CategoryQuizzes from './components/CategoryQuizzes';
 import QuizPage from './components/QuizPage.jsx'; 
 import Leaderboard from './components/Leaderboard'; 
 import ProtectedRoute from './components/ProtectedRoute';
+import ResultsPage from './components/ResultsPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -73,6 +74,11 @@ function App() {
               <QuizPage />
             </ProtectedRoute>
           } />
+          <Route path="/results" element={
+          <ProtectedRoute>
+            <ResultsPage />
+          </ProtectedRoute>
+        } />
           <Route path="/leaderboard" element={<Leaderboard />} />
           {/* Add a default route to handle unknown paths */}
           <Route path="*" element={<Navigate to="/" />} />
