@@ -1,6 +1,4 @@
-<p align="center">
-    ![Alt Text](/logo.png)
-</p>
+<img src="/logo.png" style="width:100%;">
 # maswali
 
 ## API Endpoints
