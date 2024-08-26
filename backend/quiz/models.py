@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -54,6 +56,16 @@ class QuizAttempt(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.quiz.title} - Score: {self.score}"
+
+    def finish_attempt(self):
+        self.end_time = timezone.now()
+        self.calculate_score()
+        self.save()
+
+    def calculate_score(self):
+        correct_answers = self.user_answers.filter(selected_choice__is_correct=True).count()
+        total_questions = self.quiz.questions.count()
+        self.score = (correct_answers / total_questions) * 100 if total_questions > 0 else 0    
 
 class UserAnswer(models.Model):
     attempt = models.ForeignKey(QuizAttempt, related_name='user_answers', on_delete=models.CASCADE)

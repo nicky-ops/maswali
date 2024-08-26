@@ -3,22 +3,22 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
 from django.db.models import Max
-from .models import Category, Quiz, QuizAttempt, UserAnswer, Choice
+from django.db import transaction
+from .models import Category, Quiz, QuizAttempt, UserAnswer, Choice, Question
 from .serializer import CategorySerializer, QuizSerializer, QuizAttemptSerializer, UserAnswerSerializer, LeaderboardSerializer
-
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.prefetch_related('quiz_set__questions__choices').all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
 
-
 class QuizViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Quiz.objects.prefetch_related('questions__choices').all()
+    queryset = Quiz.objects.prefetch_related('questions__choices').select_related('category').all()
     serializer_class = QuizSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     @action(detail=True, methods=['post'])
+    @transaction.atomic
     def submit(self, request, pk=None):
         quiz = self.get_object()
         user = request.user
@@ -31,6 +31,7 @@ class QuizViewSet(viewsets.ReadOnlyModelViewSet):
 
         correct_choices = Choice.objects.filter(question__quiz=quiz, is_correct=True)
 
+        user_answers = []
         for answer_data in answers_data:
             question_id = answer_data.get('question_id')
             selected_choice_id = answer_data.get('selected_choice_id')
@@ -41,16 +42,19 @@ class QuizViewSet(viewsets.ReadOnlyModelViewSet):
             except (Question.DoesNotExist, Choice.DoesNotExist):
                 continue
 
-            # Record the user's answer
-            UserAnswer.objects.create(
+            # Append to list instead of creating immediately
+            user_answers.append(UserAnswer(
                 attempt=attempt,
                 question=question,
                 selected_choice=selected_choice
-            )
+            ))
 
             # Increment score if the selected choice is correct
             if selected_choice in correct_choices:
                 score += 1
+
+        # Bulk create user answers
+        UserAnswer.objects.bulk_create(user_answers)
 
         # Save attempt with final score and end time
         attempt.score = score
@@ -60,7 +64,6 @@ class QuizViewSet(viewsets.ReadOnlyModelViewSet):
         # Return serialized response
         serializer = QuizAttemptSerializer(attempt)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
 
 class LeaderboardViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = LeaderboardSerializer
@@ -74,15 +77,14 @@ class LeaderboardViewSet(viewsets.ReadOnlyModelViewSet):
             max_score=Max('score')
         ).order_by('-max_score')[:3]
 
-
 class QuizAttemptViewSet(viewsets.ModelViewSet):
     serializer_class = QuizAttemptSerializer
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post']
 
     def get_queryset(self):
-        # Filter attempts by logged-in user
-        return QuizAttempt.objects.filter(user=self.request.user)
+        # Filter attempts by logged-in user and prefetch related fields
+        return QuizAttempt.objects.filter(user=self.request.user).select_related('quiz').prefetch_related('user_answers__question', 'user_answers__selected_choice')
 
     def perform_create(self, serializer):
         # Automatically associate the logged-in user with the attempt
