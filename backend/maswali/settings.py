@@ -37,11 +37,15 @@ CORS_ALLOWED_ORIGINS =  [
 
 AUTH_USER_MODEL = 'core_user.User'
 
-
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / 'uploads'
 
 
 # Application definition

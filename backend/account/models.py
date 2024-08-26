@@ -4,6 +4,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import Http404
 
+
+def user_directory_path(instance, filename):
+    return 'user_{0}/{1}'.format(instance.public_id, filename)
+
+
 class UserManager(BaseUserManager):
     def get_object_by_public_id(self, public_id):
         try:

@@ -29,6 +29,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]  
     http_method_names = ['get', 'patch', 'put']
+    queryset = User.objects.all()
 
     def get_object(self):
         return self.request.user
