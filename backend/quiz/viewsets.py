@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.db.models import Max
 from django.db import transaction
 from .models import Category, Quiz, QuizAttempt, UserAnswer, Choice, Question
-from .serializer import CategorySerializer, QuizSerializer, QuizAttemptSerializer, UserAnswerSerializer, LeaderboardSerializer
+from .serializer import CategorySerializer, QuizSerializer, QuizAttemptSerializer, UserAnswerSerializer, LeaderboardSerializer, QuizResultSerializer
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.prefetch_related('quiz_set__questions__choices').all()
@@ -70,7 +70,6 @@ class LeaderboardViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # Ensure we get the correct user info and max score
         return QuizAttempt.objects.values(
             'user__username'
         ).annotate(
@@ -83,9 +82,13 @@ class QuizAttemptViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post']
 
     def get_queryset(self):
-        # Filter attempts by logged-in user and prefetch related fields
         return QuizAttempt.objects.filter(user=self.request.user).select_related('quiz').prefetch_related('user_answers__question', 'user_answers__selected_choice')
 
     def perform_create(self, serializer):
-        # Automatically associate the logged-in user with the attempt
         serializer.save(user=self.request.user)
+
+    @action(detail=True, methods=['get'])
+    def results(self, request, pk=None):
+        attempt = self.get_object()
+        serializer = QuizResultSerializer(attempt)
+        return Response(serializer.data)
