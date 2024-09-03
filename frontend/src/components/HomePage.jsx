@@ -1,52 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Leaderboard from './Leaderboard';
+import useAuth from '../services/useAuth';
 
 const HomePage = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check authentication status when component mounts
-    checkAuthStatus();
-  }, []);
-
-  const checkAuthStatus = () => {
-    const token = localStorage.getItem('accessToken'); // Updated to check 'accessToken'
-    
-    // Log the token to verify it exists
-    console.log('Token:', token);
-    
-    setIsAuthenticated(!!token); // Set isAuthenticated to true if token exists
-    console.log('Is Authenticated:', !!token); // Log the authentication state
-  };
-
-  const handleTakeQuiz = () => {
-    if (isAuthenticated) {
-      navigate('/quizzes');
-    } else {
-      navigate('/login');
-    }
-  };
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      checkAuthStatus();
-    };
-
-    // Listen to changes in localStorage
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
+  const { isAuthenticated, handleTakeQuiz } = useAuth();
 
   return (
     <div
       className="flex flex-col items-center justify-between min-h-screen bg-green-500 bg-opacity-50"
       style={{
-        backgroundImage: 'url(/path/to/background.jpg)',
+        backgroundImage: 'url(/assets/images/maswali_background.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundBlendMode: 'overlay',

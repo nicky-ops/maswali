@@ -1,27 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import api from '../services/api';
-
+import React from 'react';
+import { Link } from 'react-router-dom';
+import useCategoryQuizzes from '../services/useCategoryQuizzes';
 function CategoryQuizzes() {
-  const [quizzes, setQuizzes] = useState([]);
-  const [category, setCategory] = useState(null);
-  const [error, setError] = useState('');
-  const { categoryId } = useParams();
-
-  useEffect(() => {
-    const fetchCategoryQuizzes = async () => {
-      try {
-        const response = await api.get(`quiz/categories/${categoryId}/`);
-        setCategory(response.data);
-        setQuizzes(response.data.quizzes); 
-      } catch (error) {
-        setError('Error fetching quizzes. Please try again.');
-        console.error('Error fetching quizzes:', error);
-      }
-    };
-
-    fetchCategoryQuizzes();
-  }, [categoryId]);
+  const { quizzes, category, error, handleStartQuiz } = useCategoryQuizzes();
 
   if (!category) return <div className="text-center mt-8">Loading...</div>;
 
@@ -44,12 +25,12 @@ function CategoryQuizzes() {
             <div key={quiz.id} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
               <h2 className="text-2xl font-semibold mb-4 text-gray-800">{quiz.title}</h2>
               <p className="text-gray-600 mb-4">Time Limit: {quiz.time_limit} seconds</p>
-              <Link 
-                to={`/quizzes/${quiz.id}`} 
+              <button
+                onClick={() => handleStartQuiz(quiz.id)}
                 className="block w-full text-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300"
               >
                 Start Quiz
-              </Link>
+              </button>
             </div>
           ))}
         </div>
