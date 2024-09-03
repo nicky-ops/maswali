@@ -42,6 +42,9 @@ export const logoutUser = () => {
   setAuthToken(null);
 };
 
+// Quiz API Calls
+export const getQuizResult = (attemptId) => api.get(`quiz/attempts/${attemptId}/results/`);
+
 // Axios response interceptor to handle token expiry
 api.interceptors.response.use(
   response => response,

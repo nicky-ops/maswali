@@ -49,11 +49,19 @@ class LeaderboardSerializer(serializers.Serializer):
         fields = ['username', 'max_score']
 
 class QuizResultSerializer(serializers.ModelSerializer):
+    quiz_title = serializers.CharField(source='quiz.title')
+    total_questions = serializers.IntegerField(source='quiz.questions.count')
+    time_taken = serializers.SerializerMethodField()
     questions = serializers.SerializerMethodField()
     
     class Meta:
         model = QuizAttempt
-        fields = ['id', 'score', 'questions']
+        fields = ['id', 'quiz_title', 'start_time', 'end_time', 'score', 'total_questions', 'time_taken', 'questions']
+
+    def get_time_taken(self, obj):
+        if obj.end_time and obj.start_time:
+            return int((obj.end_time - obj.start_time).total_seconds())
+        return None
 
     def get_questions(self, obj):
         questions = []
