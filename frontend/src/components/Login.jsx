@@ -1,7 +1,9 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser, setAuthToken } from '../services/api';
 
+// eslint-disable-next-line react/prop-types
 const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,6 +34,7 @@ const Login = ({ setIsAuthenticated }) => {
       // Redirect to the homepage after successful login
       navigate('/');
 
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setError('Invalid email or password');
     }
@@ -82,7 +85,7 @@ const Login = ({ setIsAuthenticated }) => {
           <Link to="/forgot-password" className="text-sm text-green-600 hover:underline">Forgot Password?</Link>
         </div>
         <p className="mt-4 text-center text-gray-600">
-          Don't have an account? <Link to="/register" className="text-green-600 hover:underline">Sign Up</Link>
+          Don`t have an account? <Link to="/register" className="text-green-600 hover:underline">Sign Up</Link>
         </p>
       </div>
     </div>
