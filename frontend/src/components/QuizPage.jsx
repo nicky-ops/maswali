@@ -54,15 +54,15 @@ function QuizPage() {
   const submitQuiz = async () => {
     try {
       const response = await api.post(`/quiz/quizzes/${quizId}/submit/`, {
-        user_answers: userAnswers,  // Submit the user's selected answers
+        user_answers: userAnswers,
       });
-
+  
       const { score } = response.data;
       const totalQuestions = quiz.questions.length;
       const finalScore = (score / totalQuestions) * 100;
-
+  
       console.log("Navigating to results with attemptId:", quizAttemptId);
-      navigate(`/results?score=${finalScore}&attemptId=${quizAttemptId}`);  // Redirect to results page
+      navigate(`/results?score=${finalScore}&attemptId=${quizAttemptId}`);
     } catch (error) {
       setError('Error submitting quiz. Please try again.');
       console.error('Error submitting quiz:', error.response ? error.response.data : error);
@@ -90,11 +90,20 @@ function QuizPage() {
   const startQuiz = async () => {
     try {
       const response = await api.get('quiz/attempts/', { quiz: quizId });
-      setQuizAttemptId(response.data.id);  // Store the quiz attempt ID
-      setIsQuizStarted(true);  // Start the quiz
+      console.log('Start Quiz Response:', response.data);
+  
+      // Find the correct object with the desired ID
+      const attemptObject = response.data.find(obj => obj.id !== undefined);
+  
+      if (attemptObject) {
+        setQuizAttemptId(attemptObject.id);
+        setIsQuizStarted(true);
+      } else {
+        throw new Error('Quiz attempt ID is missing from the response.');
+      }
     } catch (error) {
       setError('Error starting quiz. Please try again.');
-      console.error('Error starting quiz:', error.response ? error.response.data : error);
+      console.error('Error:', error.message);
     }
   };
 

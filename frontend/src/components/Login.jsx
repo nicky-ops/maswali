@@ -18,8 +18,8 @@ const Login = ({ setIsAuthenticated }) => {
       const { access, refresh } = response.data;  // Assume access and refresh tokens are returned from backend
 
       // Console logs to verify token
-      console.log('Access Token:', access);
-      console.log('Refresh Token:', refresh);
+      // console.log('Access Token:', access);
+      // console.log('Refresh Token:', refresh);
 
       // Save tokens to localStorage
       localStorage.setItem('accessToken', access);

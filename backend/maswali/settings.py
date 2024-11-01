@@ -29,12 +29,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*' ]
 
-CORS_ALLOWED_ORIGINS =  [
-		    "http://127.0.0.1:5173",
-		    "http://localhost:5173",
-            "https://vercel.live/link/maswali-git-main-nicky-ops-projects.vercel.app?via=deployment-domains-list-branch",
-            "https://vercel.live/link/maswali-htvh599qn-nicky-ops-projects.vercel.app?via=deployment-domains-list-commit",
-            "https://maswali-htvh599qn-nicky-ops-projects.vercel.app/"
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    "https://vercel.live", 
+    "https://maswali-htvh599qn-nicky-ops-projects.vercel.app"  
 ]
 
 
@@ -117,7 +116,6 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

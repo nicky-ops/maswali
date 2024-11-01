@@ -8,21 +8,21 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     choices = ChoiceSerializer(many=True, read_only=True)
-
+    
     class Meta:
         model = Question
         fields = ['id', 'text', 'choices']
 
 class QuizSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True, read_only=True)
-
+    
     class Meta:
         model = Quiz
         fields = ['id', 'title', 'time_limit', 'questions']
 
 class CategorySerializer(serializers.ModelSerializer):
     quizzes = QuizSerializer(many=True, read_only=True, source='quiz_set')
-
+    
     class Meta:
         model = Category
         fields = ['id', 'name', 'quizzes']
@@ -36,7 +36,7 @@ class QuizAttemptSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
     quiz = serializers.StringRelatedField()
     user_answers = UserAnswerSerializer(many=True, read_only=True)
-
+    
     class Meta:
         model = QuizAttempt
         fields = ['id', 'user', 'quiz', 'score', 'start_time', 'end_time', 'user_answers']
@@ -44,6 +44,43 @@ class QuizAttemptSerializer(serializers.ModelSerializer):
 class LeaderboardSerializer(serializers.Serializer):
     username = serializers.CharField(source='user__username')
     max_score = serializers.IntegerField()
-
+    
     class Meta:
         fields = ['username', 'max_score']
+
+class QuizResultSerializer(serializers.ModelSerializer):
+    quiz_title = serializers.CharField(source='quiz.title')
+    total_questions = serializers.IntegerField(source='quiz.questions.count')
+    time_taken = serializers.SerializerMethodField()
+    questions = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = QuizAttempt
+        fields = ['id', 'quiz_title', 'start_time', 'end_time', 'score', 'total_questions', 'time_taken', 'questions']
+
+    def get_time_taken(self, obj):
+        if obj.end_time and obj.start_time:
+            return int((obj.end_time - obj.start_time).total_seconds())
+        return None
+
+    def get_questions(self, obj):
+        questions = []
+        for question in obj.quiz.questions.all():
+            user_answer = obj.user_answers.filter(question=question).first()
+            correct_choice = question.choices.filter(is_correct=True).first()
+            
+            question_data = {
+                'id': question.id,
+                'text': question.text,
+                'user_answer': {
+                    'id': user_answer.selected_choice.id,
+                    'text': user_answer.selected_choice.text,
+                    'is_correct': user_answer.selected_choice.is_correct
+                } if user_answer else None,
+                'correct_answer': {
+                    'id': correct_choice.id,
+                    'text': correct_choice.text
+                } if correct_choice else None
+            }
+            questions.append(question_data)
+        return questions

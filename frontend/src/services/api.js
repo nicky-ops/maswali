@@ -3,6 +3,7 @@ import axios from 'axios';
 // API base URL from the backend
 const API_URL = 'https://maswali.onrender.com/api/';
 
+
 const api = axios.create({
   baseURL: API_URL,
 });
@@ -41,6 +42,9 @@ export const logoutUser = () => {
   localStorage.removeItem('refreshToken');
   setAuthToken(null);
 };
+
+// Quiz API Calls
+export const getQuizResult = (attemptId) => api.get(`quiz/attempts/${attemptId}/results/`);
 
 // Axios response interceptor to handle token expiry
 api.interceptors.response.use(
