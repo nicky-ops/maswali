@@ -1,8 +1,6 @@
 
 // eslint-disable-next-line no-unused-vars
 import { Link, useNavigate } from 'react-router-dom';
-import React from 'react';
-import { Link } from 'react-router-dom';
 import Leaderboard from './Leaderboard';
 import useAuth from '../services/useAuth';
 
