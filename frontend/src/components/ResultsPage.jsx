@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -62,7 +63,7 @@ function ResultsPage() {
           score >= 70 ? (
             <p className="text-green-600 font-semibold mb-4">Congratulations! You passed the quiz!</p>
           ) : (
-            <p className="text-red-600 font-semibold mb-4">You didn't pass this time. Keep practicing!</p>
+            <p className="text-red-600 font-semibold mb-4">You didn`t pass this time. Keep practicing!</p>
           )
         )}
         <div className="mt-4">

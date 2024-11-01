@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API base URL from the backend
-const API_URL = 'https://maswali.onrender.com/api/'; 
+const API_URL = 'https://maswali.onrender.com/api/';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -57,6 +57,7 @@ api.interceptors.response.use(
         localStorage.setItem('accessToken', newAccessToken);
         setAuthToken(newAccessToken);
         return api(originalRequest); // Retry the original request with the new token
+        // eslint-disable-next-line no-unused-vars
       } catch (refreshError) {
         logoutUser(); // Logout if refresh fails
         window.location.href = '/login'; // Redirect to login page
