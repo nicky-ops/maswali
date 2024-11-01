@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import Homepage from './components/HomePage';  
@@ -55,32 +56,31 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/profile" element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <UserProfile />
             </ProtectedRoute>
           } />
           <Route path="/quizzes" element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <QuizList />
             </ProtectedRoute>
           } />
           <Route path="/quiz-category/:categoryId" element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <CategoryQuizzes />
             </ProtectedRoute>
           } />
           <Route path="/quizzes/:quizId" element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <QuizPage />
             </ProtectedRoute>
           } />
           <Route path="/results" element={
-          <ProtectedRoute>
-            <ResultsPage />
-          </ProtectedRoute>
-        } />
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ResultsPage />
+            </ProtectedRoute>
+          } />
           <Route path="/leaderboard" element={<Leaderboard />} />
-          {/* Add a default route to handle unknown paths */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
