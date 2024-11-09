@@ -14,8 +14,7 @@ const ForgotPassword = () => {
     try {
       await requestPasswordReset({ email });
       setMessage('Password reset link has been sent to your email.');
-    // eslint-disable-next-line no-unused-vars
-    } catch (err) {
+      } catch (err) {
       setError('Failed to send password reset link. Please try again.');
     }
   };

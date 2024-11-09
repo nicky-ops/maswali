@@ -38,7 +38,7 @@ function ResultsPage() {
   };
 
   const handleReturnHome = () => {
-    navigate('/');  // Adjust this path as needed
+    navigate('/');  
   };
 
   if (error) {
