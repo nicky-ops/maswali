@@ -32,13 +32,14 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-100">
-        <nav className="p-4 bg-white shadow">
-          <Link to="/" className="mr-4 hover:text-blue-500">Home</Link>
+        <nav className="p-4 bg-white shadow flex justify-center">
+        <div className="flex space-x-4">
+          <Link to="/" className="text-gray-900 font-semibold text-lg hover:text-blue-500">Home</Link>
 
           {isAuthenticated ? (
             <>
-              <Link to="/profile" className="mr-4 hover:text-blue-500">Profile</Link>
-              <button onClick={handleLogout} className="hover:text-blue-500">Logout</button>
+              <Link to="/profile" className="text-gray-900 font-semibold text-lg hover:text-blue-500">Profile</Link>
+              <button onClick={handleLogout} className="text-gray-900 font-semibold text-lg hover:text-blue-500">Logout</button>
             </>
           ) : (
             <>
@@ -46,6 +47,7 @@ function App() {
               <Link to="/register" className="mr-4 hover:text-blue-500">Signup</Link>
             </>
           )}
+          </div>
         </nav>
         
         <Routes>
