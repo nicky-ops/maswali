@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../services/api';
@@ -17,6 +18,7 @@ const Register = () => {
     try {
       await registerUser({ username, first_name: firstName, last_name: lastName, email, password });
       navigate('/login'); 
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setError('Registration failed. Please try again.');
     }

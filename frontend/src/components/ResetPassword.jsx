@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { resetPassword } from '../services/api';
@@ -33,6 +34,7 @@ const ResetPassword = () => {
       await resetPassword(data);
       setSuccess('Password has been reset successfully!');
       setTimeout(() => navigate('/login'), 3000);
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setError('Failed to reset password. Please try again.');
     }

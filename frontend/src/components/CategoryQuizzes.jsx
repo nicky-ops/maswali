@@ -1,5 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+
+// eslint-disable-next-line no-unused-vars
+import { useParams, Link } from 'react-router-dom';
 import useCategoryQuizzes from '../services/useCategoryQuizzes';
 function CategoryQuizzes() {
   const { quizzes, category, error, handleStartQuiz } = useCategoryQuizzes();

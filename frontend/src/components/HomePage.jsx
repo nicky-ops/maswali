@@ -1,5 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+
+// eslint-disable-next-line no-unused-vars
+import { Link, useNavigate } from 'react-router-dom';
 import Leaderboard from './Leaderboard';
 import useAuth from '../services/useAuth';
 
@@ -24,7 +25,7 @@ const HomePage = () => {
 
         <div className="mt-6 p-6 bg-green-100 rounded-lg border-2 border-green-500">
           <p className="text-green-900 text-lg font-semibold leading-relaxed">
-            Maswali is your gateway to coding excellence! Here's what we offer:
+            Maswali is your gateway to coding excellence! Here is  what we offer:
           </p>
           <ul className="list-disc list-inside mt-2 space-y-2 text-green-800 text-lg font-medium">
             <li>Challenging timed quizzes in multiple programming languages</li>
